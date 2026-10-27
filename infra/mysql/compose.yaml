@@ -1,0 +1,20 @@
+services:
+  mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Define MYSQL_ROOT_PASSWORD localmente}
+      MYSQL_DATABASE: investigacion_experimental
+    ports:
+      - "127.0.0.1:3306:3306"
+    volumes:
+      - mysql_ppi_data:/var/lib/mysql
+      # Solo se aplica durante la primera inicialización del volumen.
+      - ../../database/experimental/migrations:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "MYSQL_PWD=\"$$MYSQL_ROOT_PASSWORD\" mysqladmin ping -h 127.0.0.1 -u root --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+volumes:
+  mysql_ppi_data:

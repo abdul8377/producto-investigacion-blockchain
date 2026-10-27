@@ -1,0 +1,35 @@
+name: Sincronizar lockfile PPI
+on:
+  push:
+    branches:
+      - feat/ppi-hito4-entorno-conciliacion
+    paths:
+      - .github/workflows/sync-lockfile.yml
+permissions:
+  contents: write
+jobs:
+  sincronizar:
+    if: github.repository == 'abdul8377/producto-investigacion-blockchain'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/ppi-hito4-entorno-conciliacion
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.25.0
+      - name: Resolver lockfile sin ejecutar scripts de terceros
+        run: pnpm install --lockfile-only --ignore-scripts --no-frozen-lockfile
+      - name: Guardar únicamente el lockfile
+        run: |
+          git add pnpm-lock.yaml
+          if git diff --cached --quiet; then
+            echo 'El lockfile ya estaba sincronizado.'
+          else
+            git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'chore: sincronizar pnpm-lock.yaml'
+            git push origin HEAD:refs/heads/feat/ppi-hito4-entorno-conciliacion
+          fi

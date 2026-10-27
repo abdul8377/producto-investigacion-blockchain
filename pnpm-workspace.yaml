@@ -1,3 +1,7 @@
 allowBuilds:
   sharp: false
   unrs-resolver: false
+  # Dependencia usada por la serialización protobuf; aprobación explícita.
+  protobufjs: true
+  # No utilizamos integración PKCS#11 en este laboratorio.
+  pkcs11js: false

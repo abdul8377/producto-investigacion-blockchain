@@ -1,43 +1,29 @@
-# Investigación blockchain — prototipo PPI
+# BlockLab — Producto de Investigación PPI
 
-**Estado al 27 de octubre de 2026: estructura y preparación, sin funcionalidades implementadas.**
+Prototipo experimental de trazabilidad microcurricular. Compara la estrategia **A (detalle sintético dentro de Fabric)** y la estrategia **B (detalle experimental cifrado en MySQL y HMAC en Fabric)**.
 
-Base creada en `C:\Users\ASUS\Documents\investigacion-blockchain` mediante `create-next-app`, con Next.js 16, App Router, TypeScript, Tailwind CSS y ESLint.
+## Estado de implementación
 
-La única interfaz ejecutable es la página vacía de la plantilla oficial. No se han desarrollado pantallas, endpoints, lógica académica, autenticación, consultas SQL ni chaincode. Las carpetas adicionales contienen documentación y archivos `.gitkeep`.
+- **Hito 1:** chaincode versionado y migración inicial de MySQL experimental.
+- **Hito 2:** autenticación local, lectura del conjunto seudonimizado, consultas académicas paginadas.
+- **Hito 3 (en desarrollo):** Gateway de Fabric, preparación de operaciones, cifrado y HMAC, registro, rectificación, revocación, supresión B y reintentos.
 
-## Ejecutar la base
+Los cambios se mantienen en pull requests de borrador; aún no están fusionados en `main`.
 
-En PowerShell:
+## Requisitos
 
-```powershell
-cd C:\Users\ASUS\Documents\investigacion-blockchain
-pnpm.cmd dev
-```
+Next.js 16 + Node.js, MySQL 8.4 y red Hyperledger Fabric 2.5 de laboratorio. Se necesita configurar las credenciales de servidor en `.env.local`, sin usar variables públicas para secretos, y una carpeta `LAB_KEYS_DIR` **fuera del repositorio**.
 
-Abrir http://localhost:3000. Detener con Ctrl+C.
+En MySQL importar las migraciones `database/experimental/migrations/001_laboratorio.sql` y `002_outbox.sql`. La base académica de origen usa una cuenta exclusiva SELECT y no debe modificarse.
 
-`pnpm.cmd lint` revisa la plantilla; `pnpm.cmd build` genera la compilación de producción y `pnpm.cmd start` la sirve una vez compilada. Para reinstalar exactamente las dependencias: `pnpm.cmd install --frozen-lockfile`.
+Antes de ejecutar: regenerar `pnpm-lock.yaml` con `pnpm install --no-frozen-lockfile` y revisar las dependencias. Después ejecutar `pnpm dev` y visitar `/acceso`, `/datos` y `/laboratorio`. La red Fabric y los certificados deberán estar listos para confirmar las transacciones.
 
-Se utilizó pnpm porque está disponible en este entorno y npm no se encontró en PATH. La versión del gestor está fijada en `package.json` y las dependencias quedan resueltas en `pnpm-lock.yaml`.
+## Protección de datos
 
-## Documentación
+El repositorio es público. No contiene nombres reales, correspondencias privadas, datos de menores ni dumps de la base de investigación. El generador `node scripts/data/synthetic.mjs` produce ejemplos **ficticios**. Los archivos con datos reales se conservarán localmente, fuera de GitHub.
 
-- [Arquitectura](docs/arquitectura.md): componentes, límites y estrategias A/B.
-- [Módulos](docs/modulos.md): responsabilidades y rutas previstas.
-- [Estructura](docs/estructura.md): mapa de carpetas.
-- [Datos](docs/datos.md): fuentes, esquema observado y tratamiento previsto.
-- [Entorno](docs/entorno.md): dependencias y servicios pendientes.
-- [Siguientes pasos](docs/siguientes-pasos.md): fases posteriores, todavía no ejecutadas.
+La supresión demostrada es exclusivamente técnica, limitada a la copia experimental activa. No acredita cumplimiento GDPR ni eliminación de respaldos.
 
-## Alcance de esta entrega
+## Limitaciones actuales
 
-Se crearon la base ejecutable, sus dependencias y la estructura documental. MySQL, Fabric y Caliper están previstos en la arquitectura, pero no están conectados ni desplegados. No se importaron datos ni se copiaron los archivos privados al proyecto.
-
-El documento externo `PLAN (10).md` se utilizó como referencia de requisitos; sus instrucciones de implementación e importación corresponden a fases futuras. La solicitud actual limita esta entrega a la estructura.
-
-Los archivos originales de Downloads se conservan en su ubicación. Los nombres reales y su correspondencia privada quedan fuera de la aplicación y de sus pruebas.
-
-## Verificación de esta entrega
-
-Compilación de producción, ESLint y comprobación de TypeScript completadas correctamente. Ver [registro de verificación](docs/verificacion.md).
+No se han ejecutado las pruebas integradas de MySQL/Fabric, revisado el lockfile nuevo ni realizado las mediciones Caliper. No interpretar operaciones enviadas como confirmadas hasta que exista commit válido y persistencia local coherente. No fusionar PR en borrador sin las verificaciones necesarias.
