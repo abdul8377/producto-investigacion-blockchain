@@ -54,7 +54,9 @@ test("supresión B crea marca sin información detallada y bloquea nuevas versio
 });
 test("A conserva detalle académico acotado; no permite supresión",async()=>{
   const ctx=mockCtx();
-  await registerEvent(ctx,{...initial({strategy:"A",detail:{tipo:"CALIFICACION",anio:2026,periodo:2,valor:"AD"}}),hmac:undefined});
+  const event=initial({strategy:"A",detail:{tipo:"CALIFICACION",anio:2026,periodo:2,valor:"AD"}});
+  delete event.hmac;
+  await registerEvent(ctx,event);
   assert.equal((await getEvent(ctx,a)).detail.valor,"AD");
   await assert.rejects(registerEvent(ctx,{eventId:b,recordId:record,strategy:"A",operation:"SUPRESION",version:2,timestamp:date,previousEventId:a}),/solo disponible para B/);
 });
@@ -62,5 +64,7 @@ test("rechaza identificadores de fuente, nombres y detalle en B",async()=>{
   const ctx=mockCtx();
   await assert.rejects(registerEvent(ctx,initial({studentId:"EST-123"})),/campo no permitido/);
   await assert.rejects(registerEvent(ctx,initial({detail:{tipo:"CALIFICACION",anio:2026,periodo:1,valor:"10"}})),/prohíbe detalle/);
-  await assert.rejects(registerEvent(ctx,{...initial({strategy:"A",detail:{tipo:"CALIFICACION",anio:2026,periodo:1,valor:"Apellido Nombre"}}),hmac:undefined}),/etiqueta académica breve/);
+  const invalid=initial({strategy:"A",detail:{tipo:"CALIFICACION",anio:2026,periodo:1,valor:"Apellido Nombre"}});
+  delete invalid.hmac;
+  await assert.rejects(registerEvent(ctx,invalid),/etiqueta académica breve/);
 });
