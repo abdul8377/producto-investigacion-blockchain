@@ -1,0 +1,38 @@
+name: PPI - comprobaciones de integración
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  unidad:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - name: Tests de contrato Fabric (sin peer)
+        run: node --test chaincode/test/*.test.cjs
+      - name: Tests criptográficos
+        run: node --experimental-strip-types --test tests/evidence.test.mjs
+  aplicacion:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.25.0
+      - name: Resolver dependencias
+        run: pnpm install --no-frozen-lockfile
+      - name: Lint
+        run: pnpm lint
+      - name: TypeScript
+        run: pnpm exec tsc --noEmit
+      - name: Build
+        run: pnpm build
+      - name: Verificar que el lockfile esté sincronizado
+        run: git diff --exit-code -- pnpm-lock.yaml
