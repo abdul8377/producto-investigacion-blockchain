@@ -18,6 +18,6 @@ export function sourcePool():Pool{
 }
 export async function sourceQuery<T extends RowDataPacket>(sql:string,values:unknown[]=[]):Promise<T[]>{
  if(!/^\s*SELECT\b/i.test(sql)||sql.includes(";"))throw Error("Consulta no permitida: solo SELECT");
- const [data]=await sourcePool().execute<RowDataPacket[]>(sql,values);
+ const [data]=await sourcePool().execute<RowDataPacket[]>(sql,values as (string|number|boolean|null)[]);
  return data as T[];
 }

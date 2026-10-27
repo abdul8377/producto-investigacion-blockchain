@@ -23,6 +23,6 @@ export async function transaction<T>(fn:(conn:PoolConnection)=>Promise<T>):Promi
 }
 export async function experimentalRows<T extends RowDataPacket>(sql:string,params:unknown[]=[]):Promise<T[]>{
  if(!/^SELECT\s/i.test(sql)||sql.includes(";"))throw Error("Solo SELECT permitido en consulta de laboratorio");
- const [rows]=await experimentalPool().execute<RowDataPacket[]>(sql,params);
+ const [rows]=await experimentalPool().execute<RowDataPacket[]>(sql,params as (string|number|boolean|null)[]);
  return rows as T[];
 }
