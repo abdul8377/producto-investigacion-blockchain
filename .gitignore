@@ -1,0 +1,75 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# Plantilla versionable sin secretos
+!.env.example
+
+# Fuentes académicas y correspondencia privada
+*.sql
+*.xlsx
+*.xls
+*.xlsm
+*.sqlite
+*.db
+correspondencia_privada*
+
+# Datos locales y resultados generados
+/data/source/*
+!/data/source/.gitkeep
+/data/experimental/*
+!/data/experimental/.gitkeep
+/artifacts/results/*
+!/artifacts/results/.gitkeep
+/artifacts/reports/*
+!/artifacts/reports/.gitkeep
+
+# Identidades y material privado de Fabric
+/infra/fabric/identities/
+/infra/fabric/organizations/
+/infra/fabric/wallet/
+*.key
+*.p12
+*.pfx
+
+# Permitir futuros scripts SQL del laboratorio, conservando los dumps excluidos
+!/database/experimental/migrations/**/*.sql
+!/database/experimental/seeds/**/*.sql
