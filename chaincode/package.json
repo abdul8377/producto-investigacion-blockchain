@@ -1,0 +1,15 @@
+{
+  "name": "ppi-trazabilidad-chaincode",
+  "version": "0.1.0",
+  "private": true,
+  "main": "index.js",
+  "engines": {"node": ">=20"},
+  "scripts": {
+    "start": "fabric-chaincode-node start",
+    "test": "node --test test/*.test.cjs"
+  },
+  "dependencies": {
+    "fabric-contract-api": "2.5.8",
+    "fabric-shim": "2.5.8"
+  }
+}
